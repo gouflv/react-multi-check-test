@@ -1,7 +1,6 @@
-TypeScript React Multi-Check Testing Program
-============================================
+# TypeScript React Multi-Check Testing Program
 
-## Code Interview Process 
+## Code Interview Process
 
 Please follow the task requirements, the component style should be matched the screenshot.
 
@@ -23,13 +22,13 @@ Your code will be reviewed and scored by the other developers of the team you wi
 
 Your code will have higher score if:
 
-1. You split the task into smaller tasks, complete them one by one, and commit them in different git commits with proper commit messages 
-1. The code is clean and easy to read and understand
-2. The variable and function names are considered carefully
-3. Small and meaningful functions for complex logic
-4. No typo and has good code format
-5. Meaningful, carefully organized test cases covered most of the important functionality
-6. Provide proper/valuable comments, but only when it's necessary (in code and/or in github PR). Try improving the code to avoid un-necessary comments. 
+1. You split the task into smaller tasks, complete them one by one, and commit them in different git commits with proper commit messages
+2. The code is clean and easy to read and understand
+3. The variable and function names are considered carefully
+4. Small and meaningful functions for complex logic
+5. No typo and has good code format
+6. Meaningful, carefully organized test cases covered most of the important functionality
+7. Provide proper/valuable comments, but only when it's necessary (in code and/or in github PR). Try improving the code to avoid un-necessary comments.
 
 ## Task
 
@@ -37,7 +36,7 @@ Implement a react function component with typescript.
 
 1. typescript + react
 2. unit tests: use `jest`
-3. provide proper comments in code (and only when it's necessary) 
+3. provide proper comments in code (and only when it's necessary)
 4. show your best practise
 5. use github pull request to submit your code
 
@@ -73,7 +72,8 @@ npm test
 ```
 
 Notice:
+
 1. Please use html native checkbox (`<input type="checkbox" />`) as the base,
    the style doesn't need to be exactly the same
 2. No need to test `App.tsx`, only test MultiCheck and related components and code
-4. Please follow the best Typescript style and best practices
+3. Please follow the best Typescript style and best practices
