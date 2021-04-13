@@ -1,6 +1,8 @@
-import './MultiCheck.css';
-
 import React from 'react';
+import {Card} from '../components/Card/Card';
+import './MultiCheck.css';
+import {MultiCheckLayout} from './MultiCheckLayout';
+import {MultiCheckOption} from './MultiCheckOption';
 
 export type Option = {
   label: string;
@@ -28,7 +30,17 @@ type Props = {
 };
 
 const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
-  return <div className='MultiCheck'>{/* TODO */}</div>;
+  return (
+    <div className='MultiCheck'>
+      <Card title={'Status'} wrapperProps={{width: '320px'}}>
+        <MultiCheckLayout columns={props.columns}>
+          {props.options.map((option) => (
+            <MultiCheckOption key={option.value} data={option} />
+          ))}
+        </MultiCheckLayout>
+      </Card>
+    </div>
+  );
 };
 
 export default MultiCheck;
