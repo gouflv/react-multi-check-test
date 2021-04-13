@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "webpack-dev-server --open",
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "jest": "25.1.0",
@@ -15,6 +16,7 @@
     "@types/react-dom": "16.9.0",
     "css-loader": "3.2.0",
     "html-webpack-plugin": "3.2.0",
+    "prettier": "^2.2.1",
     "source-map-loader": "0.2.4",
     "style-loader": "1.0.0",
     "ts-loader": "6.0.4",
