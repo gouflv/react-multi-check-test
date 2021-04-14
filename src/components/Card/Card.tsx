@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import styled from 'styled-components';
 import {View, ViewProps} from '../View/View';
 
@@ -7,14 +7,16 @@ type CardProps = {
   wrapperProps?: ViewProps;
 };
 
-export const Card: FC<CardProps> = (props) => {
+export const Card: FC<CardProps> = memo((props) => {
   return (
     <CardWrapper {...props.wrapperProps}>
       <CardHeader>{props.title}</CardHeader>
       <CardContent>{props.children}</CardContent>
     </CardWrapper>
   );
-};
+});
+
+Card.displayName = 'Card';
 
 const CardWrapper = styled(View)`
   background-color: #f1f1f1;
