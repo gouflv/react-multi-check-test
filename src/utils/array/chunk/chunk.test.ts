@@ -7,12 +7,17 @@ describe('Test array chunk', () => {
     expect(typeof chunk).toBe('function');
   });
 
-  it('should return empty array when got invalidate param', () => {
+  it('should return empty chunk when got invalidate param', () => {
     expect(chunk(undefined as any)).toStrictEqual([]);
     expect(chunk(null as any)).toStrictEqual([]);
     expect(chunk(false as any)).toStrictEqual([]);
     expect(chunk('foo' as any)).toStrictEqual([]);
     expect(chunk({foo: 1} as any)).toStrictEqual([]);
+  });
+
+  it('should return empty chunk when got empty array', () => {
+    expect(chunk([])).toStrictEqual([]);
+    expect(chunk([], 2)).toStrictEqual([]);
   });
 
   it('should chunk array', () => {

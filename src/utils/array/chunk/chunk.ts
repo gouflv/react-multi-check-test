@@ -1,7 +1,7 @@
 export type ChunkResult<T> = Array<T[]>;
 
 export const chunk = <T>(value: T[], count = 1): ChunkResult<T> => {
-  if (!Array.isArray(value)) {
+  if (!(Array.isArray(value) && value.length)) {
     return [];
   }
 
