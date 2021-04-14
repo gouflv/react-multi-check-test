@@ -2,7 +2,7 @@
   "name": "recruitment-dev-react-multicheck-homework-wenhuilv",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --open",
+    "dev": "webpack-dev-server",
     "test": "jest",
     "test:w": "jest --watch",
     "format": "prettier --write .",
