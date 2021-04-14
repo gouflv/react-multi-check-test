@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {chunk, ChunkResult} from '../utils/array/chunk/chunk';
 
-export const useChunks = <T>(
+const useChunk = <T>(
   value: T[],
   size = 1
 ): {
@@ -11,9 +11,11 @@ export const useChunks = <T>(
 
   useEffect(() => {
     set(chunk(value, size));
-  }, []);
+  }, [size, value]);
 
   return {
     chunks
   };
 };
+
+export default useChunk;
