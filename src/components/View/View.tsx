@@ -14,4 +14,6 @@ export const View = styled.div<ViewProps>`
   min-height: 0;
   flex: ${prop('flex', 'initial')};
   flex-direction: ${prop('flexDirection', 'column')};
+  width: ${prop('width', 'auto')};
+  height: ${prop('height', 'auto')};
 `;
