@@ -1,13 +1,10 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
-import {prop} from '../../utils/styled-helper';
-import {View} from '../View/View';
-
-type CardWrapperProps = {width?: string; height?: string};
+import {View, ViewProps} from '../View/View';
 
 type CardProps = {
   title: string;
-  wrapperProps?: CardWrapperProps;
+  wrapperProps?: ViewProps;
 };
 
 export const Card: FC<CardProps> = (props) => {
@@ -19,10 +16,7 @@ export const Card: FC<CardProps> = (props) => {
   );
 };
 
-const CardWrapper = styled(View)<CardWrapperProps>`
-  width: ${prop<CardWrapperProps>('width', 'auto')};
-  height: ${prop<CardWrapperProps>('height', 'auto')};
-  box-sizing: content-box;
+const CardWrapper = styled(View)`
   background-color: #f1f1f1;
 `;
 
