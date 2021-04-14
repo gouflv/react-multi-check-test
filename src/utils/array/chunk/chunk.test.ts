@@ -7,7 +7,7 @@ describe('Test array chunk', () => {
     expect(typeof chunk).toBe('function');
   });
 
-  it('should return empty chunk when got invalidate param', () => {
+  it('should return empty chunk if invalidate value provided', () => {
     expect(chunk(undefined as any)).toStrictEqual([]);
     expect(chunk(null as any)).toStrictEqual([]);
     expect(chunk(false as any)).toStrictEqual([]);
@@ -15,7 +15,7 @@ describe('Test array chunk', () => {
     expect(chunk({foo: 1} as any)).toStrictEqual([]);
   });
 
-  it('should return empty chunk when got empty array', () => {
+  it('should return empty chunk if if empty array provided', () => {
     expect(chunk([])).toStrictEqual([]);
     expect(chunk([], 2)).toStrictEqual([]);
   });
@@ -29,14 +29,14 @@ describe('Test array chunk', () => {
     expect(chunked[2]).toStrictEqual([5]);
   });
 
-  it('should return single chunk when chunk count lower 1', () => {
+  it('should return single chunk if count lower 1', () => {
     const arr = [1, 2, 3];
     const chunked = chunk(arr, 1);
     expect(chunked.length).toBe(1);
     expect(chunked[0]).toBe(arr);
   });
 
-  it('should return chunks limit by array length when chunk count too large', () => {
+  it('should return chunks that size limit to length of array if count too large', () => {
     const arr = [1, 2, 3];
     const chunked = chunk(arr, 10);
     expect(chunked.length).toBe(3);
