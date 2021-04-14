@@ -1,8 +1,10 @@
 import React from 'react';
 import {Card} from '../components/Card/Card';
+import {useChunks} from '../hooks/useChunks';
 import './MultiCheck.css';
-import {MultiCheckLayout} from './MultiCheckLayout';
-import {MultiCheckOption} from './MultiCheckOption';
+import MultiCheckOption from './MultiCheckOption';
+import MultiCheckOptionColumn from './MultiCheckOptionColumn';
+import MultiCheckPanel from './MultiCheckPanel';
 
 export type Option = {
   label: string;
@@ -30,14 +32,19 @@ type Props = {
 };
 
 const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
+  const {chunks} = useChunks(props.options, props.columns);
   return (
     <div className='MultiCheck'>
-      <Card title={'Status'} wrapperProps={{width: '320px'}}>
-        <MultiCheckLayout columns={props.columns}>
-          {props.options.map((option) => (
-            <MultiCheckOption key={option.value} data={option} />
+      <Card title={props.label || 'Status'} wrapperProps={{width: '320px'}}>
+        <MultiCheckPanel flexDirection={'row'}>
+          {chunks.map((chunk, i) => (
+            <MultiCheckOptionColumn key={i}>
+              {chunk.map((option) => (
+                <MultiCheckOption key={option.value} data={option} />
+              ))}
+            </MultiCheckOptionColumn>
           ))}
-        </MultiCheckLayout>
+        </MultiCheckPanel>
       </Card>
     </div>
   );

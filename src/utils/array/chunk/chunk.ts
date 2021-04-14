@@ -1,4 +1,6 @@
-export const chunk = <T>(value: T[], count = 1): Array<T[]> => {
+export type ChunkResult<T> = Array<T[]>;
+
+export const chunk = <T>(value: T[], count = 1): ChunkResult<T> => {
   if (!Array.isArray(value)) {
     return [];
   }
