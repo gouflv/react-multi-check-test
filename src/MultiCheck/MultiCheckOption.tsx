@@ -3,33 +3,41 @@ import styled from 'styled-components';
 import {View} from '../components/View/View';
 import {Option} from './MultiCheck';
 
-const MultiCheckOption: FC<{
-  data: Option;
+/**
+ * MultiCheckOption Props
+ * @param {Option} option
+ * @param {boolean} checked - control this option check state
+ * @param {Function} onChange - trigger when option check state change
+ */
+type OptionProps = {
+  option: Option;
   checked: boolean;
   onChange: (checked: boolean, option: Option) => void;
-}> = memo((props) => {
+};
+
+const MultiCheckOption: FC<OptionProps> = memo((props) => {
   const [checked, set] = useState(false);
 
   useEffect(() => {
-    if (props.checked !== checked) {
-      set(props.checked);
-    }
+    set(props.checked);
   }, [checked, props.checked]);
 
   return (
     <StyledOption>
       <input
-        id={props.data.value}
+        id={props.option.value}
         type={'checkbox'}
         checked={checked}
-        onChange={(e) => props.onChange(e.target.checked, props.data)}
+        onChange={(e) => props.onChange(e.target.checked, props.option)}
       />
-      <label htmlFor={props.data.value}>{props.data.label}</label>
+      <label htmlFor={props.option.value}>{props.option.label}</label>
     </StyledOption>
   );
 });
 
 MultiCheckOption.displayName = 'MultiCheckOption';
+
+export default MultiCheckOption;
 
 const StyledOption = styled(View)`
   flex-direction: row;
@@ -45,5 +53,3 @@ const StyledOption = styled(View)`
     margin-left: 4px;
   }
 `;
-
-export default MultiCheckOption;
