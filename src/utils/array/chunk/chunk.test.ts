@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {chunk} from './chunk';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 describe('Test array chunk', () => {
   it('should be defined', () => {
     expect(chunk).toBeDefined();
