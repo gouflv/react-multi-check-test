@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useMemo} from 'react';
+import React, {memo, useCallback, useEffect, useMemo, useRef} from 'react';
 import {Card} from '../components/Card/Card';
 import useChunk from '../hooks/useChunk';
 import useSet from '../hooks/useSet';
@@ -79,6 +79,17 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
     );
 
     /**
+     * Set onOptionChange into ref, and pass into MultiCheckOption
+     *
+     * Prevent MultiCheckOption re-render with a workaround
+     */
+    const onOptionChangeRef = useRef(onOptionChange);
+
+    useEffect(() => {
+      onOptionChangeRef.current = onOptionChange;
+    }, [onOptionChange]);
+
+    /**
      * Trigger onChange event when checkedValue update
      */
     useUpdateEffect(() => {
@@ -90,7 +101,7 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
 
     return (
       <div className='MultiCheck'>
-        <Card title={props.label || 'Status'} wrapperProps={{width: '320px'}}>
+        <Card title={props.label || 'Status'} width={'320px'}>
           <MultiCheckPanel flexDirection={'row'}>
             {chunks.map((chunk, i) => (
               <MultiCheckOptionColumn key={i}>
@@ -99,7 +110,7 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
                     key={option.value}
                     option={option}
                     checked={isChecked(option)}
-                    onChange={onOptionChange}
+                    onChange={onOptionChangeRef}
                   />
                 ))}
               </MultiCheckOptionColumn>
