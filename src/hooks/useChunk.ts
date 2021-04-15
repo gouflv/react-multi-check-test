@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {chunk, ChunkResult} from '../utils/array/chunk/chunk';
 
 const useChunk = <T>(
-  value: T[],
+  value: T[] = [],
   size = 1
 ): {
   chunks: ChunkResult<T>;
