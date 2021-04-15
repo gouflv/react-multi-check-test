@@ -1,7 +1,8 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import {Card} from '../components/Card/Card';
 import useChunk from '../hooks/useChunk';
 import useSet from '../hooks/useSet';
+import {useUpdateEffect} from '../hooks/useUpdateEffect';
 import MultiCheckOption from './MultiCheckOption';
 import MultiCheckOptionColumn from './MultiCheckOptionColumn';
 import MultiCheckPanel from './MultiCheckPanel';
@@ -31,82 +32,85 @@ type Props = {
   onChange?: (options: Option[]) => void;
 };
 
-const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
-  const {chunks} = useChunk(props.options, props.columns);
+const MultiCheck: React.FunctionComponent<Props> = memo(
+  (props): JSX.Element => {
+    const {chunks} = useChunk(props.options, props.columns);
 
-  /**
-   * Checked option values, initial with default checked value from props
-   */
-  const {value: checkedValue, actions: checkedValueActions} = useSet(
-    new Set<string>(props.values || [])
-  );
-
-  /**
-   * Computed checked options depend on checkedValue
-   */
-  const checkedOptions = useMemo(() => {
-    return props.options.filter((option) =>
-      checkedValueActions.has(option.value)
+    /**
+     * Checked option values, initial with default checked value from props
+     */
+    const {value: checkedValue, actions: checkedValueActions} = useSet(
+      new Set<string>(props.values || [])
     );
-  }, [checkedValueActions, props.options]);
 
-  /**
-   * Return check state for MultiCheckOption
-   */
-  const isChecked = useCallback(
-    (option: Option) => {
-      return !!checkedOptions.find((checkedOption) => checkedOption === option);
-    },
-    [checkedOptions]
-  );
+    /**
+     * Computed memoized checked options depend on checkedValue
+     */
+    const checkedOptions = useMemo(() => {
+      return props.options.filter((option) =>
+        checkedValueActions.has(option.value)
+      );
+    }, [checkedValueActions, props.options]);
 
-  /**
-   * MultiCheckOption change event handler
-   *
-   * Update local checkedValues only, and will run an effect chain:
-   *   [checkedValue update] -> [checkedOptions update] -> [call props.onChange]
-   */
-  const onOptionChange = useCallback(
-    (checked: boolean, option: Option) => {
-      if (checked) {
-        checkedValueActions.add(option.value);
-      } else {
-        checkedValueActions.remove(option.value);
+    /**
+     * Return check state for MultiCheckOption
+     */
+    const isChecked = useCallback(
+      (option: Option) => {
+        return !!checkedOptions.find(
+          (checkedOption) => checkedOption === option
+        );
+      },
+      [checkedOptions]
+    );
+
+    /**
+     * MultiCheckOption change event handler, will update local checkedValues
+     */
+    const onOptionChange = useCallback(
+      (checked: boolean, option: Option) => {
+        if (checked) {
+          checkedValueActions.add(option.value);
+        } else {
+          checkedValueActions.remove(option.value);
+        }
+      },
+      [checkedValueActions]
+    );
+
+    /**
+     * Trigger onChange event when checkedValue update
+     */
+    useUpdateEffect(() => {
+      if (!props.onChange) {
+        return;
       }
-    },
-    [checkedValueActions]
-  );
+      props.onChange(checkedOptions);
+    }, [checkedValue]);
 
-  /**
-   *
-   */
-  useEffect(() => {
-    if (!props.onChange) {
-      return;
-    }
-    // props.onChange(checkedOptions);
-  }, [checkedOptions, props]);
+    return (
+      <div className='MultiCheck'>
+        <Card title={props.label || 'Status'} wrapperProps={{width: '320px'}}>
+          <MultiCheckPanel flexDirection={'row'}>
+            {chunks.map((chunk, i) => (
+              <MultiCheckOptionColumn key={i}>
+                {chunk.map((option) => (
+                  <MultiCheckOption
+                    key={option.value}
+                    option={option}
+                    checked={isChecked(option)}
+                    onChange={onOptionChange}
+                  />
+                ))}
+              </MultiCheckOptionColumn>
+            ))}
+          </MultiCheckPanel>
+        </Card>
+      </div>
+    );
+  }
+);
 
-  return (
-    <div className='MultiCheck'>
-      <Card title={props.label || 'Status'} wrapperProps={{width: '320px'}}>
-        <MultiCheckPanel flexDirection={'row'}>
-          {chunks.map((chunk, i) => (
-            <MultiCheckOptionColumn key={i}>
-              {chunk.map((option) => (
-                <MultiCheckOption
-                  key={option.value}
-                  option={option}
-                  checked={isChecked(option)}
-                  onChange={onOptionChange}
-                />
-              ))}
-            </MultiCheckOptionColumn>
-          ))}
-        </MultiCheckPanel>
-      </Card>
-    </div>
-  );
-};
+MultiCheck.displayName = 'MultiCheck';
 
 export default MultiCheck;
