@@ -2,16 +2,16 @@ import React, {FC, memo} from 'react';
 import styled from 'styled-components';
 import {View, ViewProps} from '../View/View';
 
-type CardProps = {
+type CardProps = ViewProps & {
   title: string;
-  wrapperProps?: ViewProps;
 };
 
 export const Card: FC<CardProps> = memo((props) => {
+  const {title, children, ...wrapperProps} = props;
   return (
-    <CardWrapper {...props.wrapperProps}>
-      <CardHeader>{props.title}</CardHeader>
-      <CardContent>{props.children}</CardContent>
+    <CardWrapper {...wrapperProps}>
+      <CardHeader>{title}</CardHeader>
+      <CardContent>{children}</CardContent>
     </CardWrapper>
   );
 });
