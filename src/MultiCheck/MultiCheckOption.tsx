@@ -1,4 +1,4 @@
-import React, {FC, memo, MutableRefObject, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {View} from '../components/View/View';
 import {Option} from './MultiCheck';
@@ -12,7 +12,7 @@ import {Option} from './MultiCheck';
 type OptionProps = {
   option: Option;
   checked: boolean;
-  onChange: MutableRefObject<(checked: boolean, option: Option) => void>;
+  onChange: (checked: boolean, option: Option) => void;
 };
 
 const MultiCheckOption: FC<OptionProps> = memo((props) => {
@@ -28,7 +28,7 @@ const MultiCheckOption: FC<OptionProps> = memo((props) => {
         id={props.option.value}
         type={'checkbox'}
         checked={checked}
-        onChange={(e) => props.onChange.current(e.target.checked, props.option)}
+        onChange={(e) => props.onChange(e.target.checked, props.option)}
       />
       <label htmlFor={props.option.value}>{props.option.label}</label>
     </StyledOption>

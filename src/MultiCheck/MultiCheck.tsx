@@ -39,18 +39,17 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
     /**
      * Checked option values, initial with default checked value from props
      */
-    const {value: checkedValue, actions: checkedValueActions} = useSet(
-      new Set<string>(props.values || [])
-    );
+    const [
+      checkedValue,
+      {add: addCheckedValue, remove: removeCheckedValue, has: hasCheckedValue}
+    ] = useSet(new Set<string>(props.values || []));
 
     /**
      * Computed memoized checked options depend on checkedValue
      */
     const checkedOptions = useMemo(() => {
-      return props.options.filter((option) =>
-        checkedValueActions.has(option.value)
-      );
-    }, [checkedValueActions, props.options]);
+      return props.options.filter((option) => hasCheckedValue(option.value));
+    }, [hasCheckedValue, props.options]);
 
     /**
      * Return check state for MultiCheckOption
@@ -70,24 +69,13 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
     const onOptionChange = useCallback(
       (checked: boolean, option: Option) => {
         if (checked) {
-          checkedValueActions.add(option.value);
+          addCheckedValue(option.value);
         } else {
-          checkedValueActions.remove(option.value);
+          removeCheckedValue(option.value);
         }
       },
-      [checkedValueActions]
+      [addCheckedValue, removeCheckedValue]
     );
-
-    /**
-     * Set onOptionChange into ref, and pass into MultiCheckOption
-     *
-     * Prevent MultiCheckOption re-render with a workaround
-     */
-    const onOptionChangeRef = useRef(onOptionChange);
-
-    useEffect(() => {
-      onOptionChangeRef.current = onOptionChange;
-    }, [onOptionChange]);
 
     /**
      * Trigger onChange event when checkedValue update
@@ -110,7 +98,7 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
                     key={option.value}
                     option={option}
                     checked={isChecked(option)}
-                    onChange={onOptionChangeRef}
+                    onChange={onOptionChange}
                   />
                 ))}
               </MultiCheckOptionColumn>
