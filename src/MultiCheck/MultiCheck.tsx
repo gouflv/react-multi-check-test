@@ -13,6 +13,8 @@ export type Option = {
 };
 
 /**
+ * MultiCheck
+ *
  * Notice:
  * 1. There should be a special `Select All` option with checkbox to control all passing options
  * 2. If columns > 1, the options should be placed from top to bottom in each column
@@ -89,7 +91,7 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
 
     return (
       <div className='MultiCheck'>
-        <Card title={props.label || 'Status'} width={'320px'}>
+        <Card title={props.label} width={'320px'}>
           <MultiCheckPanel flexDirection={'row'}>
             {chunks.map((chunk, i) => (
               <MultiCheckOptionColumn key={i}>
@@ -109,6 +111,11 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
     );
   }
 );
+
+MultiCheck.defaultProps = {
+  label: 'Status',
+  columns: 1
+};
 
 MultiCheck.displayName = 'MultiCheck';
 
