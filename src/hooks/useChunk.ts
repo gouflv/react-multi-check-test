@@ -1,5 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {chunk, ChunkResult} from '../utils/array/chunk/chunk';
+import {useUpdateEffect} from './useUpdateEffect';
 
 const useChunk = <T>(
   value: T[] = [],
@@ -7,9 +8,9 @@ const useChunk = <T>(
 ): {
   chunks: ChunkResult<T>;
 } => {
-  const [chunks, set] = useState<ChunkResult<T>>([]);
+  const [chunks, set] = useState<ChunkResult<T>>(() => chunk(value, size));
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     set(chunk(value, size));
   }, [size, value]);
 
