@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import {View, ViewProps} from '../View/View';
 
 type CardProps = ViewProps & {
-  title: string;
+  title?: string;
 };
 
 export const Card: FC<CardProps> = memo((props) => {
   const {title, children, ...wrapperProps} = props;
   return (
     <CardWrapper {...wrapperProps}>
-      <CardHeader>{title}</CardHeader>
+      {title && <CardHeader>{title}</CardHeader>}
       <CardContent>{children}</CardContent>
     </CardWrapper>
   );
