@@ -34,9 +34,26 @@ type Props = {
   onChange?: (options: Option[]) => void;
 };
 
+function createSelectAllOption() {
+  const option: Option = {
+    label: 'Select All',
+    value: 'SelectAll'
+  };
+  Object.defineProperty(option, 'isSelectAll', {
+    value: true
+  });
+  return option;
+}
+
+function isSelectAllOption(option: Option) {
+  return 'isSelectAll' in option;
+}
+
+const selectAllOption = createSelectAllOption();
+
 const MultiCheck: React.FunctionComponent<Props> = memo(
   (props): JSX.Element => {
-    const chunks = useChunk(props.options, props.columns);
+    const chunks = useChunk([selectAllOption, ...props.options], props.columns);
 
     /**
      * Checked option values, initial with default checked value from props
@@ -89,20 +106,36 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
       props.onChange(checkedOptions);
     }, [checkedValue]);
 
+    /**
+     *
+     */
+    const isAllChecked = useMemo(() => false, []);
+
+    const onSelectAllOptionChange = useCallback(() => {}, []);
+
     return (
       <div className='MultiCheck'>
         <Card title={props.label} width={'320px'}>
           <MultiCheckPanel flexDirection={'row'}>
             {chunks.map((chunk, i) => (
               <MultiCheckOptionColumn key={i}>
-                {chunk.map((option) => (
-                  <MultiCheckOption
-                    key={option.value}
-                    option={option}
-                    checked={isChecked(option)}
-                    onChange={onOptionChange}
-                  />
-                ))}
+                {chunk.map((option) =>
+                  isSelectAllOption(option) ? (
+                    <MultiCheckOption
+                      key={option.value}
+                      option={option}
+                      checked={isAllChecked}
+                      onChange={onSelectAllOptionChange}
+                    />
+                  ) : (
+                    <MultiCheckOption
+                      key={option.value}
+                      option={option}
+                      checked={isChecked(option)}
+                      onChange={onOptionChange}
+                    />
+                  )
+                )}
               </MultiCheckOptionColumn>
             ))}
           </MultiCheckPanel>
