@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import {Card} from '../components/Card/Card';
 import useChunk from '../hooks/useChunk';
 import useSet from '../hooks/useSet';
@@ -34,7 +34,7 @@ type Props = {
 
 const MultiCheck: React.FunctionComponent<Props> = memo(
   (props): JSX.Element => {
-    const {chunks} = useChunk(props.options, props.columns);
+    const chunks = useChunk(props.options, props.columns);
 
     /**
      * Checked option values, initial with default checked value from props

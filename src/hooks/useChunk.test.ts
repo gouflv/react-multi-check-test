@@ -11,15 +11,15 @@ describe('Test useChunk', () => {
 
   it('should initial chucks with value', async () => {
     const {result} = setup([1, 2, 3], 2);
-    expect(result.current.chunks).toEqual([[1, 2], [3]]);
+    expect(result.current).toEqual([[1, 2], [3]]);
   });
 
   it('should memoized chunks', () => {
     const {result, rerender} = setup([1, 2, 3], 2);
-    expect(result.current.chunks).toEqual([[1, 2], [3]]);
+    expect(result.current).toEqual([[1, 2], [3]]);
 
     rerender();
-    expect(result.current.chunks).toEqual([[1, 2], [3]]);
+    expect(result.current).toEqual([[1, 2], [3]]);
   });
 
   it('should update chunks if value changed', () => {
@@ -28,10 +28,10 @@ describe('Test useChunk', () => {
       (props: any) => useChunk(props.value, 2),
       {initialProps: {value: [1, 2, 3]}}
     );
-    expect(result.current.chunks).toEqual([[1, 2], [3]]);
+    expect(result.current).toEqual([[1, 2], [3]]);
 
     rerender({value: [3, 2, 1]});
-    expect(result.current.chunks).toEqual([[3, 2], [1]]);
+    expect(result.current).toEqual([[3, 2], [1]]);
   });
 
   it('should update chunks if size changed', () => {
@@ -41,9 +41,9 @@ describe('Test useChunk', () => {
       (props: any) => useChunk(value, props.size),
       {initialProps: {size: 2}}
     );
-    expect(result.current.chunks).toEqual([[1, 2], [3]]);
+    expect(result.current).toEqual([[1, 2], [3]]);
 
     rerender({size: 1});
-    expect(result.current.chunks).toEqual([[1, 2, 3]]);
+    expect(result.current).toEqual([[1, 2, 3]]);
   });
 });
