@@ -10,6 +10,7 @@ export const useUpdateEffect: typeof useEffect = (effect, deps) => {
         return effect();
       }
     },
+    // Should not depend on isFirst state
     // eslint-disable-next-line react-hooks/exhaustive-deps
     deps
   );

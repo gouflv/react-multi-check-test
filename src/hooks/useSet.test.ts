@@ -55,7 +55,7 @@ describe('Test useSet', () => {
     expect(result.current[0]).toEqual(new Set([1, 3]));
   });
 
-  it('should memoized actions method', () => {
+  it('should memoized actions methods', () => {
     const {result} = setup(new Set([1]));
     const {add, remove} = result.current[1];
     act(() => {
