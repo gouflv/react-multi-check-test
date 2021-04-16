@@ -1,14 +1,14 @@
 export type ChunkResult<T> = Array<T[]>;
 
 /**
- * Split an array into chunks.
+ * React hooks that Split an array into chunks
  *
  * Note: chunks count param just a expectation, if array items less then chunk count,
- * the empty chunk will be ignore.
+ * the rest of empty chunk will be ignore.
  *
  * @param {Array} value - array
  * @param {number} count - chunks count
- * @return {Array} chunks
+ * @return {Array<Array>} chunks - array of chunk
  * @example
  *
  * chunk([1,2,3], 2)
