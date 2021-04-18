@@ -24,5 +24,16 @@ describe('Test useUpdateEffect', () => {
     expect(effect).toBeCalledTimes(2);
   });
 
-  it.skip('should run cleanup on unmount', () => {});
+  it('should run cleanup on unmount', () => {
+    const cleanup = jest.fn();
+    const effect = jest.fn().mockReturnValue(cleanup);
+
+    const {rerender, unmount} = renderHook(() => useUpdateEffect(effect));
+
+    rerender();
+    expect(cleanup).toHaveBeenCalledTimes(0);
+
+    unmount();
+    expect(cleanup).toHaveBeenCalledTimes(1);
+  });
 });
