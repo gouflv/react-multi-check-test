@@ -53,14 +53,22 @@ const selectAllOption = createSelectAllOption();
 
 const MultiCheck: React.FunctionComponent<Props> = memo(
   (props): JSX.Element => {
-    const chunks = useChunk([selectAllOption, ...props.options], props.columns);
+    const options = useMemo(() => [selectAllOption, ...props.options], [
+      props.options
+    ]);
+    const chunks = useChunk(options, props.columns);
 
     /**
      * Checked option values, initial with default checked value from props
      */
     const [
       checkedValue,
-      {add: addCheckedValue, remove: removeCheckedValue, has: hasCheckedValue}
+      {
+        add: addCheckedValue,
+        remove: removeCheckedValue,
+        set: setCheckedValue,
+        has: hasCheckedValue
+      }
     ] = useSet(new Set<string>(props.values || []));
 
     /**
@@ -107,11 +115,20 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
     }, [checkedValue]);
 
     /**
-     *
+     * SelectAllOption state
      */
-    const isAllChecked = useMemo(() => false, []);
+    const isAllChecked = useMemo(() => {
+      return checkedValue.size === props.options.length;
+    }, [checkedValue.size, props.options.length]);
 
-    const onSelectAllOptionChange = useCallback(() => {}, []);
+    const onSelectAllOptionChange = useCallback(
+      (checked: boolean) => {
+        setCheckedValue(
+          checked ? props.options.map((option) => option.value) : []
+        );
+      },
+      [props.options, setCheckedValue]
+    );
 
     return (
       <div className='MultiCheck'>
