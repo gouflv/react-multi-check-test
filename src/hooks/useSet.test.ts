@@ -6,11 +6,12 @@ const setup = <T>(initial?: Set<T>) => renderHook(() => useSet(initial));
 describe('Test useSet', () => {
   it('should use set', async () => {
     const {result} = setup();
-    const [value, {add, remove, has}] = result.current;
+    const [value, {add, remove, has, set}] = result.current;
     expect(value instanceof Set).toBeTruthy();
     expect(typeof add).toBe('function');
     expect(typeof remove).toBe('function');
     expect(typeof has).toBe('function');
+    expect(typeof set).toBe('function');
   });
 
   it('should initial empty set if no init value provided', () => {
@@ -57,11 +58,20 @@ describe('Test useSet', () => {
 
   it('should memoized actions methods', () => {
     const {result} = setup(new Set([1]));
-    const {add, remove} = result.current[1];
+    const {add, remove, set} = result.current[1];
     act(() => {
       add(2);
     });
     expect(result.current[1].add).toBe(add);
     expect(result.current[1].remove).toBe(remove);
+    expect(result.current[1].set).toBe(set);
+  });
+
+  it('should set values', () => {
+    const {result} = setup(new Set([1]));
+    act(() => {
+      result.current[1].set([2]);
+    });
+    expect(result.current[0]).toEqual(new Set([2]));
   });
 });

@@ -4,6 +4,7 @@ type Actions<T> = {
   add: (item: T) => void;
   remove: (item: T) => void;
   has: (item: T) => boolean;
+  set: (item: T[]) => void;
 };
 
 /**
@@ -17,7 +18,7 @@ type Actions<T> = {
  * @example
  *
  * // Right
- * const [value, { add, remove, has }] = useSet(new Set(['foo', 'bar']))
+ * const [value, { add, remove, has, set }] = useSet(new Set(['foo', 'bar']))
  *
  * // Wrong
  * const [value, actions] = useSet()
@@ -29,10 +30,12 @@ const useSet = <T>(initialValue = new Set<T>()): [Set<T>, Actions<T>] => {
     const add = (item: T) => setValue((prev) => new Set([...prev, item]));
     const remove = (item: T) =>
       setValue((prev) => new Set([...prev].filter((it) => it !== item)));
+    const set = (items: T[]) => setValue(new Set(items));
 
     return {
       add,
-      remove
+      remove,
+      set
     };
   }, []);
 
