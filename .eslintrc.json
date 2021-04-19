@@ -7,7 +7,9 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,7 +19,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "testing-library", "jest-dom"],
   "rules": {
     "react/prop-types": "off"
   },
