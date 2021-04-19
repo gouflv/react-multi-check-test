@@ -1,7 +1,8 @@
-import React, {FC, memo, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useMemo, useState} from 'react';
 import styled from 'styled-components';
 import {View} from '../components/View/View';
 import {Option} from './MultiCheck';
+import {v4 as uuid} from 'uuid';
 
 /**
  * MultiCheck OptionProps
@@ -22,15 +23,19 @@ const MultiCheckOption: FC<OptionProps> = memo((props) => {
     set(props.checked);
   }, [checked, props.checked]);
 
+  const inputId = useMemo(() => {
+    return `multi-check-option-${props.option.value}-${uuid()}`;
+  }, [props.option.value]);
+
   return (
     <StyledOption>
       <input
-        id={props.option.value}
+        id={inputId}
         type={'checkbox'}
         checked={checked}
         onChange={(e) => props.onChange(e.target.checked, props.option)}
       />
-      <label htmlFor={props.option.value}>{props.option.label}</label>
+      <label htmlFor={inputId}>{props.option.label}</label>
     </StyledOption>
   );
 });
