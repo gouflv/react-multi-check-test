@@ -23,7 +23,7 @@ describe('Test MultiCheck', () => {
     describe('prop: label', () => {
       it('should not renders the label if no label provided', () => {
         render(setup());
-        expect(screen.queryByTestId('card-header')).toBeNull();
+        expect(screen.queryByTestId('card-header')).not.toBeInTheDocument();
       });
 
       it('should renders the label if label provided', () => {
@@ -43,12 +43,12 @@ describe('Test MultiCheck', () => {
     describe('prop: options', () => {
       it('should not renders `Select All` option if empty options provided', async () => {
         render(setup());
-        expect(screen.queryByText(/Select All/i)).toBeNull();
+        expect(screen.queryByText(/Select All/i)).not.toBeInTheDocument();
       });
 
       it('should renders `Select All` and options if options provided', () => {
         render(setup({options: createOptions()}));
-        expect(screen.queryByText(/Select All/i)).not.toBeNull();
+        expect(screen.queryByText(/Select All/i)).toBeInTheDocument();
       });
 
       it('should renders options', () => {
@@ -57,8 +57,8 @@ describe('Test MultiCheck', () => {
             options: createOptions(2)
           })
         );
-        expect(screen.queryByText('option1')).not.toBeNull();
-        expect(screen.queryByText('option2')).not.toBeNull();
+        expect(screen.queryByText('option1')).toBeInTheDocument();
+        expect(screen.queryByText('option2')).toBeInTheDocument();
       });
 
       it('should re-renders if options changed', () => {
@@ -72,9 +72,9 @@ describe('Test MultiCheck', () => {
             options: createOptions(3)
           })
         );
-        expect(screen.queryByText('option1')).not.toBeNull();
-        expect(screen.queryByText('option2')).not.toBeNull();
-        expect(screen.queryByText('option3')).not.toBeNull();
+        expect(screen.queryByText('option1')).toBeInTheDocument();
+        expect(screen.queryByText('option2')).toBeInTheDocument();
+        expect(screen.queryByText('option3')).toBeInTheDocument();
       });
     });
 
@@ -86,8 +86,8 @@ describe('Test MultiCheck', () => {
           })
         );
         expect(screen.getByTestId('multi-check-option-column'));
-        expect(screen.queryByText('option1')).not.toBeNull();
-        expect(screen.queryByText('option2')).not.toBeNull();
+        expect(screen.queryByText('option1')).toBeInTheDocument();
+        expect(screen.queryByText('option2')).toBeInTheDocument();
       });
 
       it('should renders options in two columns', () => {
@@ -100,8 +100,8 @@ describe('Test MultiCheck', () => {
         expect(
           screen.queryAllByTestId('multi-check-option-column').length
         ).toBe(2);
-        expect(screen.queryByText('option1')).not.toBeNull();
-        expect(screen.queryByText('option2')).not.toBeNull();
+        expect(screen.queryByText('option1')).toBeInTheDocument();
+        expect(screen.queryByText('option2')).toBeInTheDocument();
       });
 
       it('should re-renders if columns changed', () => {
@@ -177,6 +177,7 @@ describe('Test MultiCheck', () => {
         const onChange = jest.fn();
         const {rerender} = render(
           setup({
+            options: createOptions(),
             onChange
           })
         );
@@ -318,15 +319,16 @@ describe('Test MultiCheck', () => {
       );
 
       const selectAll = screen.getByRole('checkbox', {name: /Select All/i});
+
+      // check other checkbox
       const checkbox = screen.getAllByRole('checkbox', {name: /option/i});
-      act(() => {
-        checkbox.forEach((el) => {
-          userEvent.click(el);
-        });
+      checkbox.forEach((el) => {
+        userEvent.click(el);
       });
 
       expect(selectAll).toBeChecked();
-      expect(onChange.mock.calls[0][0]).toEqual(options);
+      expect(onChange).toBeCalledTimes(2);
+      expect(onChange.mock.calls[1][0]).toEqual(options);
     });
 
     it('should `Select All` unchecked if any other option unchecked', () => {
@@ -347,7 +349,40 @@ describe('Test MultiCheck', () => {
       // unchecked option1
       userEvent.click(screen.getByRole('checkbox', {name: 'option1'}));
       expect(selectAll).not.toBeChecked();
+      expect(onChange).toBeCalledTimes(1);
       expect(onChange.mock.calls[0][0]).toEqual([options[1]]);
+    });
+
+    it('should `Select All` work if one of options value is equal to "Select All"', () => {
+      const onChange = jest.fn();
+      const options = [
+        ...createOptions(),
+        {label: 'Select All', value: 'Select All'}
+      ];
+      render(
+        setup({
+          options,
+          onChange
+        })
+      );
+
+      const [realSelectAll, fakeSelectAll] = screen.getAllByRole('checkbox', {
+        name: 'Select All'
+      });
+
+      // check fakeSelectAll
+      userEvent.click(fakeSelectAll);
+      expect(realSelectAll).not.toBeChecked();
+      expect(fakeSelectAll).toBeChecked();
+
+      expect(onChange).toBeCalledTimes(1);
+      expect(onChange.mock.calls[0][0]).toEqual([options[1]]);
+
+      // check option1
+      userEvent.click(screen.getByRole('checkbox', {name: /option/}));
+      expect(onChange).toBeCalledTimes(2);
+      expect(onChange.mock.calls[1][0]).toEqual(options);
+      expect(realSelectAll).toBeChecked();
     });
   });
 });

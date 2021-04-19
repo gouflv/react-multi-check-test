@@ -3,6 +3,7 @@ import {Card} from '../components/Card/Card';
 import useChunk from '../hooks/useChunk';
 import useSet from '../hooks/useSet';
 import {useUpdateEffect} from '../hooks/useUpdateEffect';
+import {isArrayEqual} from '../utils/array/isArrayEqual/isArrayEqual';
 import MultiCheckOption from './MultiCheckOption';
 import MultiCheckOptionColumn from './MultiCheckOptionColumn';
 import MultiCheckPanel from './MultiCheckPanel';
@@ -84,7 +85,7 @@ const MultiCheck: React.FunctionComponent<MultiCheckProps> = memo(
     }, [props.values]);
 
     /**
-     * Computed memoized checked options depend on checkedValue
+     * Computed checked options depend on checkedValue
      */
     const checkedOptions = useMemo(() => {
       return props.options.filter((option) => hasCheckedValue(option.value));
@@ -118,13 +119,20 @@ const MultiCheck: React.FunctionComponent<MultiCheckProps> = memo(
 
     /**
      * Trigger onChange event when checkedValue update
+     *
+     * should not trigger onChange if checkValue is equal with props.values
      */
     useUpdateEffect(() => {
       if (!props.onChange) {
         return;
       }
+
+      if (isArrayEqual(props.values || [], Array.from(checkedValue))) {
+        return;
+      }
+
       props.onChange(checkedOptions);
-    }, [checkedValue]);
+    }, [props.onChange, props.values, checkedValue, checkedOptions]);
 
     /**
      * SelectAllOption state
