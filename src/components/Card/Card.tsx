@@ -10,7 +10,11 @@ export const Card: FC<CardProps> = memo((props) => {
   const {title, children, ...wrapperProps} = props;
   return (
     <CardWrapper {...wrapperProps}>
-      {title && <CardHeader data-testid={'card-header'}>{title}</CardHeader>}
+      {title && (
+        <CardHeader as={'h2'} data-testid={'card-header'}>
+          {title}
+        </CardHeader>
+      )}
       <CardContent>{children}</CardContent>
     </CardWrapper>
   );
@@ -23,9 +27,11 @@ const CardWrapper = styled(View)`
 `;
 
 const CardHeader = styled(View)`
+  margin: 0;
   padding: 0 8px;
   height: 30px;
   justify-content: center;
+  font-size: inherit;
   background-color: #ccc;
 `;
 
