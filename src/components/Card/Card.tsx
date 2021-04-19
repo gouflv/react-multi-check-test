@@ -10,7 +10,7 @@ export const Card: FC<CardProps> = memo((props) => {
   const {title, children, ...wrapperProps} = props;
   return (
     <CardWrapper {...wrapperProps}>
-      {title && <CardHeader>{title}</CardHeader>}
+      {title && <CardHeader data-testid={'card-header'}>{title}</CardHeader>}
       <CardContent>{children}</CardContent>
     </CardWrapper>
   );

@@ -26,7 +26,7 @@ export type Option = {
  * @param {Function} onChange - when checked options are changed,
  *                             they should be passed to outside
  */
-type Props = {
+export type MultiCheckProps = {
   label?: string;
   options: Option[];
   columns?: number;
@@ -51,15 +51,20 @@ function isSelectAllOption(option: Option) {
 
 const selectAllOption = createSelectAllOption();
 
-const MultiCheck: React.FunctionComponent<Props> = memo(
+const MultiCheck: React.FunctionComponent<MultiCheckProps> = memo(
   (props): JSX.Element => {
-    const options = useMemo(() => [selectAllOption, ...props.options], [
-      props.options
-    ]);
+    /**
+     * Computed chunked options from props.options
+     */
+    const options = useMemo(() => {
+      if (!props.options.length) return [];
+      return [selectAllOption, ...props.options];
+    }, [props.options]);
+
     const chunks = useChunk(options, props.columns);
 
     /**
-     * Checked option values, initial with default checked value from props
+     * Checked option values, initial default checked value from props.values
      */
     const [
       checkedValue,
@@ -70,6 +75,13 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
         has: hasCheckedValue
       }
     ] = useSet(new Set<string>(props.values || []));
+
+    /**
+     * Update checkedValue when props.values changed
+     */
+    useUpdateEffect(() => {
+      props.values && setCheckedValue(props.values);
+    }, [props.values]);
 
     /**
      * Computed memoized checked options depend on checkedValue
@@ -163,7 +175,6 @@ const MultiCheck: React.FunctionComponent<Props> = memo(
 );
 
 MultiCheck.defaultProps = {
-  label: 'Status',
   columns: 1
 };
 
