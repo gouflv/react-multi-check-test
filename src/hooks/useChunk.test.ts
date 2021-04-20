@@ -15,11 +15,13 @@ describe('Test useChunk', () => {
   });
 
   it('should memoized chunks', () => {
-    const {result, rerender} = setup([1, 2, 3], 2);
+    const value = [1, 2, 3];
+    const {result, rerender} = setup(value, 2);
     expect(result.current).toEqual([[1, 2], [3]]);
 
+    const prevChunks = result.current;
     rerender();
-    expect(result.current).toEqual([[1, 2], [3]]);
+    expect(result.current).toBe(prevChunks);
   });
 
   it('should update chunks if value changed', () => {
